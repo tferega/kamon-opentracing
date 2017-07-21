@@ -8,6 +8,7 @@ import kamon.trace.{ActiveSpan => KamonActiveSpan}
 import kamon.trace.Span.{Real => KamonRealSpan}
 import org.scalactic.source.{Position => ScalaTestPosition}
 import org.scalatest.DoNotDiscover
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
 
 @DoNotDiscover
 class SpanBuilderSpec extends Harness {
@@ -73,10 +74,9 @@ class SpanBuilderSpec extends Harness {
     val span = builderBuilder(builder)(parentSpan).startManual()
     span must be (a[Span])
     span.finish()
-    val report = TestReporter.waitForReport()
-    report must be ('defined)
-    report.get.operationName must be (name)
-    report.get.parentId must be (kamonParentSpan.context.spanID.string)
+    val report = waitForReport
+    report.operationName must be (name)
+    report.parentId must be (kamonParentSpan.context.spanID.string)
   }
 
   private def testTaggedSpan(tagInserter: OpenSpanBuilder => OpenSpanBuilder, tagComparator: String)(implicit pos: ScalaTestPosition): Unit = {
@@ -85,9 +85,8 @@ class SpanBuilderSpec extends Harness {
     val taggedSpanBuilder = tagInserter(initialSpanBuilder)
     val span = taggedSpanBuilder.startManual
     span.finish()
-    val report = TestReporter.waitForReport()
-    report must be ('defined)
-    report.get.operationName must be (name)
-    report.get.tags must contain ("tag" -> tagComparator)
+    val report = waitForReport
+    report.operationName must be (name)
+    report.tags must contain ("tag" -> tagComparator)
   }
 }

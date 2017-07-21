@@ -24,7 +24,7 @@ class TracerSpec extends Harness {
   "Tracer" should {
     "be available via a no-arg constructor" in {
       tracer = new Tracer
-      tracer must be (a[Tracer])
+      // Quack
     }
 
     "be able to provide a SpanBuilder" in {

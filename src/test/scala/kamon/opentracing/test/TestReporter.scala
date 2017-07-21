@@ -31,16 +31,6 @@ object TestReporter extends KamonSpanReporter {
     }
   }
 
-  def waitForReport(timeout: Duration = DefaultDuration): Option[Report] = {
-    val end = System.currentTimeMillis + timeout.toMillis
-    var result: Option[Report] = None
-    while (System.currentTimeMillis <= end && result.isEmpty) {
-      result = getLatestReport
-      Thread.sleep(100)
-    }
-    result
-  }
-
   private def fromFinishedSpan(finishedSpan: KamonFinishedSpan): Report = {
     Report(
       finishedSpan.operationName,
