@@ -42,12 +42,12 @@ class SpanBuilder private(protected val wrapped: KamonSpanBuilder) extends OpenS
   }
 
   override def withTag(key: String, value: Boolean): OpenSpanBuilder = {
-    wrapped.withSpanTag(key, value.toString)
+    wrapped.withSpanTag(key, value)
     this
   }
 
   override def withTag(key: String, value: Number): OpenSpanBuilder = {
-    wrapped.withSpanTag(key, value.toString)
+    wrapped.withSpanTag(key, value.longValue)
     this
   }
 
