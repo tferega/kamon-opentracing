@@ -1,7 +1,7 @@
 package kamon.opentracing
 
 import io.opentracing.Tracer.{SpanBuilder => OpenSpanBuilder}
-import io.opentracing.{References, ActiveSpan => OpenActiveSpan, BaseSpan => OpenBaseSpan, Span => OpenSpan, SpanContext => OpenSpanContext}
+import io.opentracing.{References => OpenReferences, ActiveSpan => OpenActiveSpan, BaseSpan => OpenBaseSpan, Span => OpenSpan, SpanContext => OpenSpanContext}
 import kamon.trace.Tracer.{SpanBuilder => KamonSpanBuilder}
 import org.slf4j.LoggerFactory
 
@@ -30,7 +30,7 @@ class SpanBuilder private(protected val wrapped: KamonSpanBuilder) extends OpenS
   override def addReference(referenceType: String, referencedContext: OpenSpanContext): OpenSpanBuilder = {
     referenceType match {
       case null =>
-      case References.CHILD_OF | References.FOLLOWS_FROM => asChildOf(referencedContext)
+      case OpenReferences.CHILD_OF | OpenReferences.FOLLOWS_FROM => asChildOf(referencedContext)
       case _ => logger.error(s"Unsupported reference $referenceType")
     }
     this
