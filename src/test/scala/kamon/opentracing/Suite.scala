@@ -6,6 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, Suites}
 
 object Suite {
   private def suiteList: Seq[Harness] = Seq(
+    new TracerSpec
   )
 }
 
