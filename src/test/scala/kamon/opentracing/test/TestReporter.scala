@@ -9,7 +9,7 @@ import scala.concurrent.duration.{Duration, DurationInt}
 
 object TestReporter extends KamonSpanReporter {
   case class AnnotationReport(name: String, fields: Map[String, String])
-  case class Report(operationName: String, traceId: String, spanId: String, parentId: String, tags: Map[String, Any], annotations: Seq[AnnotationReport])
+  case class Report(operationName: String, traceId: String, spanId: String, parentId: String, tags: Map[String, String], annotations: Seq[AnnotationReport])
 
   private object Lock
   private val DefaultDuration = 2 seconds
@@ -47,7 +47,7 @@ object TestReporter extends KamonSpanReporter {
       finishedSpan.context.traceID.string,
       finishedSpan.context.spanID.string,
       finishedSpan.context.parentID.string,
-      finishedSpan.tags.mapValues(_.asInstanceOf[Any]),
+      finishedSpan.tags.mapValues(_.toString),
       finishedSpan.annotations.map(e => AnnotationReport(e.name, e.fields)))
   }
 }
