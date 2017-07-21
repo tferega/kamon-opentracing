@@ -38,7 +38,7 @@ class Tracer private (protected val wrapped: KamonTracer) extends OpenTracer {
         logger.error(s"Format $format not supported!")
         None
     }
-    SpanContext.wrap(context.orNull)
+    context.map(SpanContext.wrap).orNull
   }
 
   def inject[C](spanContext: OpenSpanContext, format: OpenFormat[C], carrier: C): Unit = spanContext match {
@@ -62,7 +62,7 @@ class Tracer private (protected val wrapped: KamonTracer) extends OpenTracer {
     case _ => logger.error("Can't extract the parent ID from a non-Kamon SpanContext")
   }
 
-  def activeSpan(): OpenActiveSpan = ActiveSpan.wrap(wrapped.activeSpan)
+  def activeSpan(): OpenActiveSpan = Option(wrapped.activeSpan).map(ActiveSpan.wrap).orNull
 
   def makeActive(span: OpenSpan): OpenActiveSpan = span match {
     case span: Span => ActiveSpan.wrap(wrapped.makeActive(span.unwrap))

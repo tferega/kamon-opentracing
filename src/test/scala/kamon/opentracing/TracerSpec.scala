@@ -102,15 +102,11 @@ class TracerSpec extends Harness {
 
     "get an active span when there are none" in {
       val span = tracer.activeSpan()
-      span must be (a[ActiveSpan])
-      val activeSpan = span.asInstanceOf[ActiveSpan]
-      activeSpan.unwrap must be (a[KamonDefaultActiveSpan])
-      val wrappedSpan = activeSpan.unwrap.asInstanceOf[KamonDefaultActiveSpan]
-      wrappedSpan.context.traceID.string must be ("")
+      span must be (null)
     }
 
     "get an active span where there is one" in {
-      val span = tracer.buildSpan("myspan").startActive
+      val span = tracer.buildSpan("myspan").ignoreActiveSpan.startActive
       span must be (a[ActiveSpan])
       val activeSpan = span.asInstanceOf[ActiveSpan]
       activeSpan.unwrap must be (a[KamonDefaultActiveSpan])
